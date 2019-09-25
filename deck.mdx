@@ -17,6 +17,7 @@ export const themes = [dark, prism];
 
 - everything is an _Expression_
 - you can replace an _Expression_ with its value<br />without changing the _Program_'s behavior
+  - i.e. do not _throw_ errors, _return_ them
 
 ---
 
@@ -24,13 +25,13 @@ export const themes = [dark, prism];
 
 - small little _Functions_ that can be combined to have a more complex _Program_
 - we can combine these _Programs_ to have an even more complex _Program_
-- keep combining
+  - keep on combining'
 
 ---
 
-# Lets introduce fp-ts
+# Let's introduce `fp-ts`
 
-- version 2
+- Version 2
 - Requires `TypeScript 3.5+`
 - [github.com/gcanti/fp-ts](https://github.com/gcanti/fp-ts)
 
@@ -49,9 +50,11 @@ npm i fp-ts
 
 ---
 
-## Get the first element
+## Get the first element in a safe way
 
 ```ts
+import { Option, some, none } from "fp-ts/lib/Option";
+
 function head<A>(arr: Array<A>): Option<A> {
   return arr.length > 0 ? some(arr[0]) : none;
 }
@@ -177,3 +180,113 @@ function safeFind<A>(as: Array<A>, p: predicate): Option<A> {
 safeFind([1, 2, 3], x => x > 2); // some(3)
 safeFind([1, 2, 3], x => x > 10); // none
 ```
+
+---
+
+## A real world example
+
+```ts
+import * as O from "fp-ts/lib/Option";
+import * as A from "fp-ts/lib/Array";
+import { pipe } from "fp-ts/lib/pipeable";
+
+const rw = pipe(
+  A.head([1, 2, 3, 4]),
+  O.map(n => n * 2),
+  O.chain(n === 0 ? O.none : O.some(1 / n)),
+  O.filter(n => n > 1),
+  O.fold(() => "ko", a => `ok: ${a}`)
+);
+```
+
+---
+
+## Let's step up the game
+
+_a little bit_
+
+---
+
+# Either
+
+### `Either<L,R>` is a more powerful alternative of `Option<A>`.
+
+- If the value is there, we have an instance of `Right<R>`
+- If the value is not there, we have an instance of `Left<L>`.
+
+---
+
+## Check if the user is underage
+
+```ts
+import { Either, right, left } from "fp-ts/lib/Either";
+
+function validateUser(user: User): Either<string, User> {
+  if (user.age > 18) {
+    return right(user);
+  } else {
+    return left("Underage user!!!");
+  }
+}
+```
+
+---
+
+## You should be familiar with these (1/3)
+
+```ts
+const userAge: Either<string, number> = pipe(
+  validateUser(user),
+  map(u => u.age)
+); // right(33)
+
+const error: Either<ErrorBox, User> = pipe(
+  validateUser(user),
+  mapLeft(e => ({ message: `error is: ${e}` }))
+); // right(user)
+```
+
+---
+
+## You should be familiar with these (2/3)
+
+```ts
+const doingSomething: Either<string, User> = pipe(
+  validateUser(user),
+  chain(u => doSomething(u))
+); // left("Too short of a name")
+```
+
+---
+
+## You should be familiar with these (3/3)
+
+```ts
+const validatedUser1: User = pipe(
+  validateUser(user),
+  getOrElse(() => defaultUser)
+); // user
+
+const validatedUser2: User = pipe(
+  validateUser(user),
+  fold(e => defaultUser, user => user)
+); // user
+```
+
+---
+
+## Using Either for real
+
+```ts
+import { Either, tryCatch } from "fp-ts/lib/Either";
+function parseJSON(s: string): Either<Error, unknown> {
+  return tryCatch(() => JSON.parse(s), e => new Error(String(e)));
+}
+
+const goodJson: Either<Error, unknown> = parseJSON('{"goodjson":true}'); 
+// right({ goodjson: true })
+
+const badJson: Either<Error, unknown> = parseJSON("{");
+// left("Error: SyntaxError: Unexpected end of JSON input ...")
+```
+

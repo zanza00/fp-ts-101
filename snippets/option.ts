@@ -92,3 +92,20 @@ function safeFind<A>(as: Array<A>, predicate: (a: A) => boolean): Option<A> {
 [1, 2, 3].find(x => x > 10); // undefined
 safeFind([1, 2, 3], x => x > 2); // some(3)
 safeFind([1, 2, 3], x => x > 10); // none
+
+console.log(
+  opt0,
+  opt12,
+  opt23,
+  manipulate1,
+  manipulate2,
+  nested1,
+  nested2,
+  notNested1,
+  notNested2,
+  notNested3,
+  actualNumber1,
+  actualNumber2,
+  usingFold1,
+  usingFold2
+);
