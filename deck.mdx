@@ -1,12 +1,12 @@
-import future from "@mdx-deck/themes/future";
-import prism from '@mdx-deck/themes/syntax-highlighter-prism'
-export const themes = [future, prism];
+import dark from "@mdx-deck/themes/dark";
+import prism from "@mdx-deck/themes/syntax-highlighter-prism";
+export const themes = [dark, prism];
 
 # Intro to Fp(-ts)
 
 ---
 
-## FP has two main thing
+## Functional Programming<br />has two main things
 
 - Referential trasparency
 - Composition (as a design pattern)
@@ -15,19 +15,24 @@ export const themes = [future, prism];
 
 ## Referential transparency
 
-- everything is an expression
-- you can replace an expression with its value without changing the program's behavior
+- everything is an _Expression_
+- you can replace an _Expression_ with its value<br />without changing the _Program_'s behavior
 
 ---
 
 ## Composition
 
-- small little Functions that can be combined to have a more complex program
-- we can combine these functon to have even more complex program
+- small little _Functions_ that can be combined to have a more complex _Program_
+- we can combine these _Programs_ to have an even more complex _Program_
+- keep combining
 
 ---
 
 # Lets introduce fp-ts
+
+- version 2
+- Requires `TypeScript 3.5+`
+- [github.com/gcanti/fp-ts](https://github.com/gcanti/fp-ts)
 
 ```
 npm i fp-ts
@@ -37,7 +42,7 @@ npm i fp-ts
 
 # Option
 
-`Option<A>` is a container for an optional value of type A.
+### `Option<A>` is a container for an optional value of type `A`.
 
 - If the value is there, we have an instance of `Some<A>`
 - If the value is not there, we have an instance of `None`.
@@ -47,21 +52,128 @@ npm i fp-ts
 ## Get the first element
 
 ```ts
-// get the first element
 function head<A>(arr: Array<A>): Option<A> {
   return arr.length > 0 ? some(arr[0]) : none;
 }
 
-const example1: Option<number> = pipe(
-head([1, 2]),
-map(n => n + 100),
-); // some(101)
+const opt0: Option<number> = head([]); // none
+const opt12: Option<number> = head([1, 2]); // some(1)
+const opt23: Option<number> = head([2, 3]); // some(2)
 ```
 
 ---
 
-# Either
+## Manipulate values
+
+```ts
+const manipulate1: Option<number> = pipe(
+  head([1, 2]),
+  map(n => n + 100)
+); // some(101)
+
+const manipulate2: Option<number> = pipe(
+  head([]),
+  map(n => n + 100)
+); // none
+```
 
 ---
 
-## demo time!
+## Using `map` nests the result (1/2)
+
+```ts
+function numberToStringIfGreaterThanOne(n: number): Option<string> {
+  return n > 1 ? some(n.toString()) : none;
+}
+```
+
+---
+
+## Using `map` nests the result (2/2)
+
+```ts
+const nested1: Option<Option<string>> = pipe(
+  head([2, 3]),
+  map(n => numberToStringIfGreaterThanOne(n))
+); // some(some("2"))
+
+const nested2: Option<Option<string>> = pipe(
+  head([1, 2]),
+  map(n => numberToStringIfGreaterThanOne(n))
+); // some(none)
+```
+
+---
+
+## `Chain` to the rescue (1/2)
+
+```ts
+const notNested1: Option<string> = pipe(
+  head([2, 3]),
+  chain(n => numberToStringIfGreaterThanOne(n))
+); // some("2")
+
+const notNested2: Option<string> = pipe(
+  head([1, 2]),
+  chain(n => numberToStringIfGreaterThanOne(n))
+); // none
+```
+
+---
+
+## `Chain` to the rescue (2/2)
+
+```ts
+const notNested3: Option<string> = pipe(
+  head([]),
+  chain(n => numberToStringIfGreaterThanOne(n))
+); // none
+```
+
+---
+
+## Extracting values
+
+```ts
+const actualNumber1: number = pipe(
+  head([42, 43]),
+  getOrElse(() => -1)
+); // 42
+
+const actualNumber2: number = pipe(
+  head([]),
+  getOrElse(() => -1)
+); // -1
+```
+
+---
+
+## another way using `fold`
+
+```ts
+const usingFold1: number = pipe(
+  head([42, 43]),
+  fold(() => -1, n => n)
+); // 42
+
+const usingFold2: number = pipe(
+  head([]),
+  fold(() => -1, n => n)
+); // -1
+```
+
+---
+
+## maybe there is a value
+
+```ts
+type predicate = (a: A) => boolean;
+function safeFind<A>(as: Array<A>, p: predicate): Option<A> {
+  return fromNullable(as.find(p));
+}
+
+[1, 2, 3].find(x => x > 2); // 3
+[1, 2, 3].find(x => x > 10); // undefined
+safeFind([1, 2, 3], x => x > 2); // some(3)
+safeFind([1, 2, 3], x => x > 10); // none
+```

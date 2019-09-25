@@ -5,9 +5,10 @@
   "main": "index.js",
   "dependencies": {
     "@mdx-deck/themes": "^3.0.8",
-    "fp-ts": "^2.0.5",
     "code-surfer": "^2.0.0-alpha.8",
+    "fp-ts": "^2.0.5",
     "mdx-deck": "^3.0.11",
+    "prettier": "1.18.2",
     "prism-react-renderer": "^0.1.7",
     "raw-loader": "^3.1.0",
     "styled-components": "^4.4.0",
@@ -16,6 +17,7 @@
   "devDependencies": {},
   "scripts": {
     "start": "mdx-deck deck.mdx",
+    "pretty": "prettier --no-config --write \"**/*.{ts,mdx}\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
