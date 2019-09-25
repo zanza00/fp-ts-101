@@ -1,14 +1,12 @@
 import future from "@mdx-deck/themes/future";
-import shadesOfPurple from "prism-react-renderer/themes/shadesOfPurple";
-import { Code } from "code-surfer";
-
-export const themes = [future];
+import prism from '@mdx-deck/themes/syntax-highlighter-prism'
+export const themes = [future, prism];
 
 # Intro to Fp(-ts)
 
 ---
 
-## Functional Programming has two main thing
+## FP has two main thing
 
 - Referential trasparency
 - Composition (as a design pattern)
@@ -39,27 +37,26 @@ npm i fp-ts
 
 # Option
 
-`Option(A)` is a container for an optional value of type A.
+`Option<A>` is a container for an optional value of type A.
 
-- If the value is there, we have an instance of `Some(A)>`
+- If the value is there, we have an instance of `Some<A>`
 - If the value is not there, we have an instance of `None`.
 
 ---
 
 ## Get the first element
 
-<Code
-  title="🦄 Shades of Purple"
-  lang="typescript"
-  theme={shadesOfPurple}
-  notes="⬇️"
-  code={require("!!raw-loader!./option.ts")}
-  steps={[{ lines: [1, 5] }]}
-/>
+```ts
+// get the first element
+function head<A>(arr: Array<A>): Option<A> {
+  return arr.length > 0 ? some(arr[0]) : none;
+}
 
----
-
-## Demo Time
+const example1: Option<number> = pipe(
+head([1, 2]),
+map(n => n + 100),
+); // some(101)
+```
 
 ---
 
