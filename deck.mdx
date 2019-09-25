@@ -1,0 +1,70 @@
+import future from "@mdx-deck/themes/future";
+import shadesOfPurple from "prism-react-renderer/themes/shadesOfPurple";
+import { Code } from "code-surfer";
+
+export const themes = [future];
+
+# Intro to Fp(-ts)
+
+---
+
+## Functional Programming has two main thing
+
+- Referential trasparency
+- Composition (as a design pattern)
+
+---
+
+## Referential transparency
+
+- everything is an expression
+- you can replace an expression with its value without changing the program's behavior
+
+---
+
+## Composition
+
+- small little Functions that can be combined to have a more complex program
+- we can combine these functon to have even more complex program
+
+---
+
+# Lets introduce fp-ts
+
+```
+npm i fp-ts
+```
+
+---
+
+# Option
+
+`Option(A)` is a container for an optional value of type A.
+
+- If the value is there, we have an instance of `Some(A)>`
+- If the value is not there, we have an instance of `None`.
+
+---
+
+## Get the first element
+
+<Code
+  title="🦄 Shades of Purple"
+  lang="typescript"
+  theme={shadesOfPurple}
+  notes="⬇️"
+  code={require("!!raw-loader!./option.ts")}
+  steps={[{ lines: [1, 5] }]}
+/>
+
+---
+
+## Demo Time
+
+---
+
+# Either
+
+---
+
+## demo time!

@@ -3,11 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
+    "@mdx-deck/themes": "^3.0.8",
+    "fp-ts": "^2.0.5",
+    "code-surfer": "^2.0.0-alpha.8",
     "mdx-deck": "^3.0.11",
-    "mdx-deck-code-surfer": "^0.5.5"
+    "prism-react-renderer": "^0.1.7",
+    "raw-loader": "^3.1.0",
+    "styled-components": "^4.4.0",
+    "typescript": "^3.6.3"
   },
+  "devDependencies": {},
   "scripts": {
     "start": "mdx-deck deck.mdx",
     "test": "echo \"Error: no test specified\" && exit 1"
