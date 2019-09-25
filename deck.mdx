@@ -1,3 +1,4 @@
+
 import dark from "@mdx-deck/themes/dark";
 import prism from "@mdx-deck/themes/syntax-highlighter-prism";
 export const themes = [dark, prism];
@@ -151,7 +152,7 @@ const actualNumber2: number = pipe(
 
 ---
 
-## another way using `fold`
+## Another way using `fold`
 
 ```ts
 const usingFold1: number = pipe(
@@ -167,7 +168,7 @@ const usingFold2: number = pipe(
 
 ---
 
-## maybe there is a value
+## Maybe there is a value
 
 ```ts
 type predicate = (a: A) => boolean;
@@ -206,6 +207,7 @@ const rw = pipe(
 _a little bit_
 
 ---
+
 
 # Either
 
@@ -290,3 +292,14 @@ const badJson: Either<Error, unknown> = parseJSON("{");
 // left("Error: SyntaxError: Unexpected end of JSON input ...")
 ```
 
+---
+
+# Resources
+
+- This repo!
+  - Examples in `./snippets/*.ts`
+- [docs](https://gcanti.github.io/fp-ts/)
+  - [learning resources](https://gcanti.github.io/fp-ts/introduction/learning-resources.html)
+  - [recipes](https://gcanti.github.io/fp-ts/recipes/)
+- [functional programming](https://github.com/gcanti/functional-programming) by Giulio Canti (italiano)
+- [mostly adequate guide](https://github.com/MostlyAdequate/mostly-adequate-guide) by Professor Frisby (english)

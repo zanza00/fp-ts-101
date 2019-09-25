@@ -17,6 +17,7 @@
   "devDependencies": {},
   "scripts": {
     "start": "mdx-deck deck.mdx",
+    "build": "mdx-deck build deck.mdx",
     "pretty": "prettier --no-config --write \"**/*.{ts,mdx}\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
