@@ -47,6 +47,10 @@ npm i fp-ts
 
 ---
 
+<Image src="https://media.giphy.com/media/5zf2M4HgjjWszLd4a5/giphy.gif" />
+
+---
+
 # Option
 
 ### `Option<A>` is a container for an optional value of type `A`.
@@ -207,9 +211,10 @@ const rw = pipe(
 
 ---
 
-## Let's step up the game
-
-_a little bit_
+<Image
+  src="https://media.giphy.com/media/B2VHxqpGuNyNa3t5rC/source.gif"
+  size="contain"
+/>
 
 ---
 
@@ -298,9 +303,10 @@ const badJson: Either<Error, unknown> = parseJSON("{");
 
 ---
 
-## Even more
-
-_this time sideways_
+<Image
+  src="https://media.giphy.com/media/iqtppTG9X8lwTKda0F/source.gif"
+  size="contain"
+/>
 
 ---
 
@@ -328,7 +334,8 @@ const answer2 = await p;
 ```
 
 ---
-## Using  `Task` (1/3)
+
+## Using `Task` (1/3)
 
 ```ts
 import * as T from "fp-ts/lib/Task";
@@ -339,7 +346,8 @@ const q: T.Task<string> = question("name please");
 ```
 
 ---
-## Using  `Task` (2/3)
+
+## Using `Task` (2/3)
 
 ```ts
 const result: T.Task<string[]> = pipe(
@@ -354,19 +362,29 @@ const result: T.Task<string[]> = pipe(
 ```
 
 ---
-## Using  `Task` (3/3)
+
+## Using `Task` (3/3)
 
 ```ts
 // somewhere else
 result().then(([answer1, answer2]) => {
   console.log(answer1, answer2);
 });
-
 ```
 
 ---
 
-<Image src="https://botcrawl.com/wp-content/uploads/2012/08/Mike-Tyson-Now-Kith-Birds-Meme.jpg" ></ Image>
+<div
+  style={{
+    height: "100%",
+    width: "100%",
+    backgroundImage:
+      "url(https://media.giphy.com/media/PvDM6QHuLPCxi/source.gif)",
+    backgroundSize: "auto",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat"
+  }}
+></div>
 
 ---
 
@@ -374,10 +392,43 @@ result().then(([answer1, answer2]) => {
 
 ### `TaskEither<L,R>` represent an async operation that can fail.
 
-- It's `Task<Either<L,R>>` with a more convenient api 
+- It's `Task<Either<L,R>>` with a more convenient api
 
 ---
 
+```ts
+import * as TE from "fp-ts/lib/TaskEither";
+import * as E from "fp-ts/lib/Either";
+import { pipe } from "fp-ts/lib/pipeable";
+
+type User = object;
+
+function validate(user: User): TE.TaskEither<string, User> {
+  return pipe(
+    TE.tryCatch(
+      () =>
+        fetch("/api/validateUser", {
+          method: "POST",
+          body: JSON.stringify(user)
+        }),
+      E.toError
+    ),
+    TE.mapLeft(error => `FetchError: ${error.message}`),
+    TE.chain(response =>
+      response.ok
+        ? TE.taskEither.of(response)
+        : TE.left(`Validation Error, User is invalid`)
+    ),
+    TE.map(response => response.json())
+  );
+}
+```
+
+---
+
+<Image src="https://media.giphy.com/media/APHFMUIaTnLIA/source.gif" />
+
+---
 # Resources
 
 - This repo!
