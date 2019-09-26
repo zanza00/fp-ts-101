@@ -1,7 +1,12 @@
+import { Head, Notes, Image } from "mdx-deck";
 
 import dark from "@mdx-deck/themes/dark";
 import prism from "@mdx-deck/themes/syntax-highlighter-prism";
 export const themes = [dark, prism];
+
+<Head>
+  <title>Intro to Fp(-ts)</title>
+</Head>
 
 # Intro to Fp(-ts)
 
@@ -208,7 +213,6 @@ _a little bit_
 
 ---
 
-
 # Either
 
 ### `Either<L,R>` is a more powerful alternative of `Option<A>`.
@@ -285,12 +289,92 @@ function parseJSON(s: string): Either<Error, unknown> {
   return tryCatch(() => JSON.parse(s), e => new Error(String(e)));
 }
 
-const goodJson: Either<Error, unknown> = parseJSON('{"goodjson":true}'); 
+const goodJson: Either<Error, unknown> = parseJSON('{"goodjson":true}');
 // right({ goodjson: true })
 
 const badJson: Either<Error, unknown> = parseJSON("{");
 // left("Error: SyntaxError: Unexpected end of JSON input ...")
 ```
+
+---
+
+## Even more
+
+_this time sideways_
+
+---
+
+# Task
+
+### `Task<A>` represent an async operation.
+
+- It's like a `Promise<A>` but lazy and referentially transparent
+
+---
+
+## These are not the same
+
+```ts
+declare function question(message: string): Promise<string>;
+
+const answer1 = await question("name please");
+const answer2 = await question("name please");
+
+// vs
+
+const p = question("name please");
+const answer1 = await p;
+const answer2 = await p;
+```
+
+---
+## Using  `Task` (1/3)
+
+```ts
+import * as T from "fp-ts/lib/Task";
+
+declare function question(message: string): T.Task<string>;
+
+const q: T.Task<string> = question("name please");
+```
+
+---
+## Using  `Task` (2/3)
+
+```ts
+const result: T.Task<string[]> = pipe(
+  q,
+  T.chain(answer1 =>
+    pipe(
+      q,
+      T.map(answer2 => [answer1, answer2])
+    )
+  )
+);
+```
+
+---
+## Using  `Task` (3/3)
+
+```ts
+// somewhere else
+result().then(([answer1, answer2]) => {
+  console.log(answer1, answer2);
+});
+
+```
+
+---
+
+<Image src="https://botcrawl.com/wp-content/uploads/2012/08/Mike-Tyson-Now-Kith-Birds-Meme.jpg" ></ Image>
+
+---
+
+# TaskEither
+
+### `TaskEither<L,R>` represent an async operation that can fail.
+
+- It's `Task<Either<L,R>>` with a more convenient api 
 
 ---
 
